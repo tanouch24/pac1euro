@@ -1,19 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseAdmin, type LeadInsert } from "@/lib/supabase";
+import {
+  SupabaseConfigError,
+  getSupabaseAdmin,
+  type LeadInsert,
+} from "@/lib/supabase";
 
 const allowedHousingTypes = new Set(["Maison individuelle", "Appartement"]);
 
 const allowedHeatingTypes = new Set([
   "Fioul",
   "Gaz",
-  "Electrique ancien",
+  "Électrique ancien",
   "Bois",
   "Autre chauffage",
 ]);
 
 const allowedOccupancyStatuses = new Set([
-  "Proprietaire occupant",
-  "Proprietaire bailleur",
+  "Propriétaire occupant",
+  "Propriétaire bailleur",
   "Locataire",
 ]);
 
@@ -35,7 +39,7 @@ export async function POST(request: NextRequest) {
 
     if (!contentType.includes("application/json")) {
       return NextResponse.json(
-        { message: "Format de requete invalide." },
+        { message: "Format de requête invalide." },
         { status: 415 },
       );
     }
@@ -61,7 +65,7 @@ export async function POST(request: NextRequest) {
       !allowedOccupancyStatuses.has(lead.statut_occupation)
     ) {
       return NextResponse.json(
-        { message: "Merci de verifier les informations saisies." },
+        { message: "Merci de vérifier les informations saisies." },
         { status: 400 },
       );
     }
@@ -72,7 +76,7 @@ export async function POST(request: NextRequest) {
     if (error) {
       console.error("Supabase lead insert failed", error);
       return NextResponse.json(
-        { message: "La demande n'a pas pu etre enregistree." },
+        { message: "La demande n'a pas pu être enregistrée." },
         { status: 500 },
       );
     }
@@ -80,6 +84,17 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: "Demande transmise." }, { status: 201 });
   } catch (error) {
     console.error("Lead API error", error);
+
+    if (error instanceof SupabaseConfigError) {
+      return NextResponse.json(
+        {
+          message:
+            "Le formulaire n'est pas encore configuré côté serveur. Merci de réessayer plus tard.",
+        },
+        { status: 500 },
+      );
+    }
+
     return NextResponse.json(
       { message: "Une erreur serveur est survenue." },
       { status: 500 },

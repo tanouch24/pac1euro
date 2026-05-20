@@ -4,143 +4,146 @@ import Image from "next/image";
 import { FormEvent, useMemo, useState } from "react";
 
 const heatingTypes = [
-  "Fioul",
-  "Gaz",
-  "Electrique ancien",
-  "Bois",
-  "Autre chauffage",
+  { value: "Fioul", label: "Fioul" },
+  { value: "Gaz", label: "Gaz" },
+  { value: "Électrique ancien", label: "Électrique ancien" },
+  { value: "Bois", label: "Bois" },
+  { value: "Autre chauffage", label: "Autre chauffage" },
 ];
 
 const occupancyStatuses = [
-  "Proprietaire occupant",
-  "Proprietaire bailleur",
-  "Locataire",
+  { value: "Propriétaire occupant", label: "Propriétaire occupant" },
+  { value: "Propriétaire bailleur", label: "Propriétaire bailleur" },
+  { value: "Locataire", label: "Locataire" },
 ];
 
-const housingTypes = ["Maison individuelle", "Appartement"];
+const housingTypes = [
+  { value: "Maison individuelle", label: "Maison individuelle" },
+  { value: "Appartement", label: "Appartement" },
+];
 
 const trustBadges = [
-  "Etude d'eligibilite en 2 minutes",
+  "Étude sans engagement",
   "Aides selon votre situation",
-  "Conseiller specialise renovation",
+  "Aides soumises à conditions d'éligibilité",
 ];
 
 const reasons = [
   {
-    title: "Reduire sa facture d'energie",
-    text: "Une pompe a chaleur bien dimensionnee peut consommer moins qu'un ancien chauffage fioul, gaz ou electrique.",
+    title: "Réduire ses dépenses d'énergie",
+    text: "Une pompe à chaleur bien dimensionnée peut aider à mieux maîtriser la consommation d'une maison équipée d'un chauffage ancien.",
   },
   {
     title: "Gagner en confort au quotidien",
-    text: "L'installation vise une chaleur plus stable, un pilotage plus simple et une maison plus agreable en hiver.",
+    text: "L'installation vise une chaleur plus stable, un pilotage plus simple et une maison plus agréable en hiver.",
   },
   {
-    title: "Anticiper la renovation de son logement",
-    text: "Remplacer un equipement vieillissant permet de preparer un projet plus performant et mieux documente.",
+    title: "Anticiper la rénovation de son logement",
+    text: "Remplacer un équipement vieillissant permet de préparer un projet plus performant et mieux documenté.",
   },
 ];
 
 const aids = [
   {
-    title: "MaPrimeRenov'",
-    text: "Une aide publique calculee selon les revenus du foyer, le logement et la nature des travaux.",
+    title: "MaPrimeRénov'",
+    text: "Une aide publique calculée selon les revenus du foyer, le logement et la nature des travaux.",
   },
   {
-    title: "Certificats d'Economies d'Energie",
-    text: "Une prime CEE peut etre mobilisable selon le projet, l'ancien chauffage et les criteres techniques.",
+    title: "Certificats d'Économies d'Énergie",
+    text: "Une prime CEE peut être mobilisable selon le projet, l'ancien chauffage et les critères techniques.",
   },
   {
-    title: "TVA reduite",
-    text: "Certains travaux de renovation energetique peuvent beneficier d'un taux de TVA reduit si les conditions sont reunies.",
+    title: "TVA réduite",
+    text: "Certains travaux de rénovation énergétique peuvent bénéficier d'un taux de TVA réduit si les conditions sont réunies.",
   },
   {
     title: "Eco-PTZ",
-    text: "Un financement complementaire peut etre etudie pour lisser le reste a charge selon le dossier.",
+    text: "Un financement complémentaire peut être étudié pour lisser le reste à charge selon le dossier.",
   },
 ];
 
 const steps = [
   {
-    label: "Eligibilite",
+    label: "Éligibilité",
     text: "Vous renseignez votre logement, votre chauffage actuel et votre situation d'occupation.",
   },
   {
     label: "Estimation",
-    text: "Un conseiller analyse les aides potentiellement mobilisables et les informations a verifier.",
+    text: "Un conseiller analyse les aides potentiellement mobilisables et les informations à vérifier.",
   },
   {
     label: "Projet",
-    text: "Le dimensionnement, les contraintes techniques et le parcours administratif sont clarifies.",
+    text: "Le dimensionnement, les contraintes techniques et le parcours administratif sont clarifiés.",
   },
   {
     label: "Installation",
-    text: "Le projet avance avec un suivi structure jusqu'a la mise en service de l'equipement.",
+    text: "Le projet avance avec un suivi structuré jusqu'à la mise en service de l'équipement.",
   },
 ];
 
 const profiles = [
   {
-    title: "Maison chauffee au fioul",
-    text: "Un foyer proprietaire peut etudier le remplacement d'une chaudiere ancienne par une solution plus performante.",
+    title: "Maison chauffée au fioul",
+    text: "Un foyer propriétaire peut étudier le remplacement d'une chaudière ancienne par une solution plus performante.",
   },
   {
     title: "Chauffage gaz vieillissant",
-    text: "L'eligibilite depend des revenus, du logement, des performances attendues et des criteres en vigueur.",
+    text: "L'éligibilité dépend des revenus, du logement, des performances attendues et des critères en vigueur.",
   },
   {
-    title: "Radiateurs electriques anciens",
-    text: "Une etude permet de comparer les solutions possibles avant de s'engager dans des travaux.",
+    title: "Radiateurs électriques anciens",
+    text: "Une étude permet de comparer les solutions possibles avant de s'engager dans des travaux.",
   },
 ];
 
 const reviews = [
   {
     quote:
-      "L'appel a ete clair et sans pression. Nous avons compris quelles aides pouvaient correspondre a notre maison.",
-    author: "Claire et Julien, proprietaires en Gironde",
+      "L'appel a été clair et sans pression. Nous avons compris quelles aides pouvaient correspondre à notre maison.",
+    author: "Claire et Julien, propriétaires en Gironde",
   },
   {
     quote:
-      "Le conseiller a pris le temps de verifier notre chauffage existant et les criteres avant de parler budget.",
-    author: "Nadia, proprietaire occupante dans le Nord",
+      "Le conseiller a pris le temps de vérifier notre chauffage existant et les critères avant de parler budget.",
+    author: "Nadia, propriétaire occupante dans le Nord",
   },
   {
     quote:
-      "Nous voulions reduire nos depenses sans nous lancer a l'aveugle. L'etude nous a aide a cadrer le projet.",
-    author: "Marc, maison individuelle pres de Tours",
+      "Nous voulions réduire nos dépenses sans nous lancer à l'aveugle. L'étude nous a aidés à cadrer le projet.",
+    author: "Marc, maison individuelle près de Tours",
   },
 ];
 
 const faqs = [
   {
-    question: "Qui peut demander des aides pour une pompe a chaleur ?",
+    question: "Qui peut demander des aides pour une pompe à chaleur ?",
     answer:
-      "Les aides dependent notamment du statut d'occupation, des revenus, du type de logement, de l'ancien chauffage et des criteres techniques applicables au projet.",
+      "Les aides dépendent notamment du statut d'occupation, des revenus, du type de logement, de l'ancien chauffage et des critères techniques applicables au projet.",
   },
   {
-    question: "Une maison chauffee au fioul est-elle concernee ?",
+    question: "Une maison chauffée au fioul est-elle concernée ?",
     answer:
-      "Oui, ce type de situation peut faire partie des dossiers a etudier. Le montant et les conditions varient selon le foyer et le logement.",
+      "Oui, ce type de situation peut faire partie des dossiers à étudier. Le montant et les conditions varient selon le foyer et le logement.",
   },
   {
     question: "Les locataires peuvent-ils faire une demande ?",
     answer:
-      "Un locataire peut se renseigner, mais les travaux doivent generalement etre valides par le proprietaire du logement.",
+      "Un locataire peut se renseigner, mais les travaux doivent généralement être validés par le propriétaire du logement.",
   },
   {
-    question: "Combien de temps prend l'etude d'eligibilite ?",
+    question: "Combien de temps prend l'étude d'éligibilité ?",
     answer:
-      "Le premier formulaire prend environ 2 minutes. Un conseiller peut ensuite demander des informations complementaires pour affiner l'analyse.",
+      "Le premier formulaire prend environ 2 minutes. Un conseiller peut ensuite demander des informations complémentaires pour affiner l'analyse.",
   },
   {
     question: "Le montant des aides est-il identique pour tous ?",
     answer:
-      "Non. Les aides varient selon les revenus, la composition du foyer, l'adresse du logement, l'equipement remplace et les regles en vigueur.",
+      "Non. Les aides varient selon les revenus, la composition du foyer, l'adresse du logement, l'équipement remplacé et les règles en vigueur.",
   },
   {
     question: "Faut-il changer toute l'installation de chauffage ?",
     answer:
-      "Pas systematiquement. La faisabilite depend de la maison, de l'isolation, des emetteurs existants et de la solution retenue.",
+      "Pas systématiquement. La faisabilité dépend de la maison, de l'isolation, des émetteurs existants et de la solution retenue.",
   },
 ];
 
@@ -159,9 +162,9 @@ const initialForm: FormState = {
   telephone: "",
   email: "",
   ville: "",
-  logement_type: housingTypes[0],
-  chauffage_actuel: heatingTypes[0],
-  statut_occupation: occupancyStatuses[0],
+  logement_type: housingTypes[0].value,
+  chauffage_actuel: heatingTypes[0].value,
+  statut_occupation: occupancyStatuses[0].value,
 };
 
 export default function Home() {
@@ -198,12 +201,12 @@ export default function Home() {
       const data = (await response.json()) as { message?: string };
 
       if (!response.ok) {
-        throw new Error(data.message ?? "Impossible d'envoyer la demande.");
+        throw new Error(data.message ?? "Impossible d'envoyer votre demande.");
       }
 
       setStatus("success");
       setMessage(
-        "Votre demande a bien ete transmise. Un conseiller revient vers vous pour verifier votre eligibilite.",
+        "Votre demande a bien été transmise. Un conseiller revient vers vous pour vérifier votre éligibilité.",
       );
       setForm(initialForm);
     } catch (error) {
@@ -211,7 +214,7 @@ export default function Home() {
       setMessage(
         error instanceof Error
           ? error.message
-          : "Une erreur est survenue. Merci de reessayer.",
+          : "Une erreur est survenue. Merci de réessayer.",
       );
     }
   }
@@ -221,10 +224,10 @@ export default function Home() {
       <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:px-10">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-300">
-            Verification des aides
+            Vérification des aides
           </p>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-            Verifiez votre eligibilite
+            Vérifiez votre éligibilité
           </h2>
           <p className="mt-5 text-lg leading-8 text-slate-300">
             Indiquez votre situation. Un conseiller vous recontacte pour analyser
@@ -250,11 +253,13 @@ export default function Home() {
               />
             </label>
             <label className="space-y-2">
-              <span className="text-sm font-semibold">Telephone</span>
+              <span className="text-sm font-semibold">Téléphone</span>
               <input
                 required
                 type="tel"
                 minLength={8}
+                pattern="[+()0-9 .\-]{8,24}"
+                inputMode="tel"
                 value={form.telephone}
                 onChange={(event) =>
                   setForm((current) => ({
@@ -312,7 +317,9 @@ export default function Home() {
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-100"
               >
                 {heatingTypes.map((type) => (
-                  <option key={type}>{type}</option>
+                  <option key={type.value} value={type.value}>
+                    {type.label}
+                  </option>
                 ))}
               </select>
             </label>
@@ -330,7 +337,9 @@ export default function Home() {
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-100"
               >
                 {occupancyStatuses.map((statusOption) => (
-                  <option key={statusOption}>{statusOption}</option>
+                  <option key={statusOption.value} value={statusOption.value}>
+                    {statusOption.label}
+                  </option>
                 ))}
               </select>
             </label>
@@ -348,7 +357,9 @@ export default function Home() {
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-100"
               >
                 {housingTypes.map((type) => (
-                  <option key={type}>{type}</option>
+                  <option key={type.value} value={type.value}>
+                    {type.label}
+                  </option>
                 ))}
               </select>
             </label>
@@ -359,8 +370,8 @@ export default function Home() {
             className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-slate-950 px-7 py-4 text-base font-semibold text-white shadow-xl shadow-slate-950/20 transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {status === "loading"
-              ? "Verification en cours..."
-              : "Verifier mon eligibilite"}
+              ? "Vérification en cours..."
+              : "Vérifier mon éligibilité"}
           </button>
           {message ? (
             <p
@@ -375,8 +386,8 @@ export default function Home() {
             </p>
           ) : null}
           <p className="mt-4 text-xs leading-5 text-slate-500">
-            Vos informations sont utilisees uniquement pour traiter votre demande
-            d&apos;etude d&apos;eligibilite.
+            Vos informations sont utilisées uniquement pour traiter votre demande
+            d&apos;étude d&apos;éligibilité.
           </p>
         </form>
       </div>
@@ -401,7 +412,7 @@ export default function Home() {
               href="#lead-form"
               className="hidden rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-950/15 transition hover:-translate-y-0.5 hover:bg-slate-800 sm:inline-flex"
             >
-              Verifier mon eligibilite
+              Vérifier mon éligibilité
             </a>
           </header>
 
@@ -417,22 +428,22 @@ export default function Home() {
               ))}
             </div>
             <p className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-emerald-700">
-              Pompe a chaleur pour particuliers
+              Pompe à chaleur pour particuliers
             </p>
             <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
-              Calculez vos aides pour installer une pompe a chaleur
+              Calculez vos aides pour installer une pompe à chaleur
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
               Selon votre logement, vos revenus et votre ancien chauffage,
-              plusieurs aides peuvent reduire fortement le cout de votre
-              installation.
+              des aides peuvent réduire le coût de votre installation, sous
+              réserve des conditions d&apos;éligibilité.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <a
                 href="#lead-form"
                 className="inline-flex items-center justify-center rounded-full bg-slate-950 px-7 py-4 text-base font-semibold text-white shadow-2xl shadow-slate-950/20 transition hover:-translate-y-0.5 hover:bg-slate-800"
               >
-                Verifier mon eligibilite
+                Vérifier mon éligibilité
               </a>
               <a
                 href="#aides"
@@ -444,7 +455,7 @@ export default function Home() {
             <dl className="mt-10 grid grid-cols-3 gap-3 rounded-[2rem] border border-slate-200 bg-white/85 p-4 shadow-xl shadow-slate-950/5 backdrop-blur">
               {[
                 ["2 min", "Premier cadrage"],
-                ["4 aides", "A analyser"],
+                ["4 aides", "À analyser"],
                 ["Maison", "Projet individuel"],
               ].map(([value, label]) => (
                 <div key={label}>
@@ -460,7 +471,7 @@ export default function Home() {
             <div className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-3 shadow-2xl shadow-slate-950/12">
               <Image
                 src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1400&q=80"
-                alt="Maison individuelle recente avec jardin"
+                alt="Maison individuelle récente avec jardin"
                 width={1400}
                 height={1050}
                 priority
@@ -471,8 +482,8 @@ export default function Home() {
                   Remplacez votre ancien chauffage avec les aides disponibles
                 </p>
                 <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Le montant depend de votre revenu, de votre logement, de votre
-                  chauffage actuel et des criteres applicables.
+                  Le montant dépend de votre revenu, de votre logement, de votre
+                  chauffage actuel et des critères applicables.
                 </p>
               </div>
             </div>
@@ -514,10 +525,10 @@ export default function Home() {
               Aides disponibles
             </p>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
-              Des dispositifs a verifier selon votre situation
+              Des dispositifs à vérifier selon votre situation
             </h2>
             <p className="mt-5 text-lg leading-8 text-slate-600">
-              Aides selon revenus, logement et situation. L&apos;etude permet de
+              Aides soumises à conditions d&apos;éligibilité. L&apos;étude permet de
               comprendre les dispositifs potentiellement mobilisables avant de
               planifier les travaux.
             </p>
@@ -570,11 +581,11 @@ export default function Home() {
               Profils
             </p>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
-              Exemples de profils eligibles a etudier
+              Exemples de profils à étudier
             </h2>
             <p className="mt-5 text-lg leading-8 text-slate-600">
-              Chaque dossier reste individuel. Le resultat depend des revenus,
-              de la maison, de l&apos;equipement remplace et des regles en vigueur.
+              Chaque dossier reste individuel. Le résultat dépend des revenus,
+              de la maison, de l&apos;équipement remplacé et des règles en vigueur.
             </p>
           </div>
           <div className="grid gap-4">
@@ -618,7 +629,7 @@ export default function Home() {
           FAQ
         </p>
         <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
-          Questions frequentes
+          Questions fréquentes
         </h2>
         <div className="mt-8 divide-y divide-slate-200 rounded-[2rem] border border-slate-200 bg-white shadow-xl shadow-slate-950/5">
           {faqs.map((faq) => (
@@ -636,13 +647,15 @@ export default function Home() {
         <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-10 text-sm text-slate-600 sm:px-8 md:flex-row md:items-center md:justify-between lg:px-10">
           <div>
             <p className="font-semibold text-slate-950">HDI Compagnie</p>
-            <p className="mt-1">Etude des aides pour pompe a chaleur en maison.</p>
+            <p className="mt-1">Étude des aides pour pompe à chaleur en maison.</p>
           </div>
           <div className="flex flex-wrap gap-4">
             <a href="#lead-form" className="font-semibold text-slate-900">
-              Verifier mon eligibilite
+              Vérifier mon éligibilité
             </a>
-            <span>Confidentialite</span>
+            <a href="/confidentialite" className="font-semibold text-slate-900">
+              Confidentialité
+            </a>
             <span>Contact conseiller</span>
           </div>
         </div>

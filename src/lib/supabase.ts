@@ -1,5 +1,12 @@
 import { createClient } from "@supabase/supabase-js";
 
+class SupabaseConfigError extends Error {
+  constructor() {
+    super("Supabase environment variables are missing or invalid.");
+    this.name = "SupabaseConfigError";
+  }
+}
+
 type LeadInsert = {
   nom: string;
   telephone: string;
@@ -37,7 +44,7 @@ export function getSupabaseAdmin() {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl || !serviceRoleKey) {
-    throw new Error("Supabase environment variables are missing.");
+    throw new SupabaseConfigError();
   }
 
   return createClient<Database>(supabaseUrl, serviceRoleKey, {
@@ -48,4 +55,5 @@ export function getSupabaseAdmin() {
   });
 }
 
+export { SupabaseConfigError };
 export type { LeadInsert };

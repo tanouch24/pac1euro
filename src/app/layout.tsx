@@ -4,17 +4,17 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://hdi-compagnie.fr"),
   title: {
-    default: "HDI Compagnie | Aides pompe a chaleur",
+    default: "HDI Compagnie | Aides pompe à chaleur",
     template: "%s | HDI Compagnie",
   },
   description:
-    "Calculez vos aides pour installer une pompe a chaleur selon votre logement, vos revenus et votre ancien chauffage.",
+    "Calculez vos aides pour installer une pompe à chaleur selon votre logement, vos revenus et votre ancien chauffage.",
   keywords: [
-    "aides pompe a chaleur",
-    "MaPrimeRenov",
-    "CEE pompe a chaleur",
+    "aides pompe à chaleur",
+    "MaPrimeRénov",
+    "CEE pompe à chaleur",
     "remplacer chauffage fioul",
-    "pompe a chaleur maison",
+    "pompe à chaleur maison",
   ],
   authors: [{ name: "HDI Compagnie" }],
   creator: "HDI Compagnie",
@@ -27,23 +27,23 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     url: "/",
     siteName: "HDI Compagnie",
-    title: "Calculez vos aides pour installer une pompe a chaleur",
+    title: "Calculez vos aides pour installer une pompe à chaleur",
     description:
-      "Etude d'eligibilite pour particuliers selon revenus, logement et ancien chauffage.",
+      "Étude d'éligibilité pour particuliers selon revenus, logement et ancien chauffage.",
     images: [
       {
         url: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80",
         width: 1200,
         height: 630,
-        alt: "Maison individuelle recente avec jardin",
+        alt: "Maison individuelle récente avec jardin",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "HDI Compagnie | Aides pompe a chaleur",
+    title: "HDI Compagnie | Aides pompe à chaleur",
     description:
-      "Verifiez les aides disponibles pour votre pompe a chaleur en maison individuelle.",
+      "Vérifiez les aides disponibles pour votre pompe à chaleur en maison individuelle.",
     images: [
       "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80",
     ],
